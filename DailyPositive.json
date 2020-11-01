@@ -1,0 +1,66 @@
+{
+  "$schema": "https://vega.github.io/schema/vega-lite/v4.json",
+  "width": 800,
+  "height": 600,
+  "title": "COVID-19 Daily Positive Cases per Country",
+  "data": {
+    "url": "https://raw.githubusercontent.com/kuanjunqiang/FIT3179/main/tested_worldwide.csv"
+  },
+  "params": [
+    {
+      "name": "Daily_positive_Above",
+      "value": 0,
+      "bind": {
+        "input": "range",
+        "min": 0,
+        "max": 85000,
+        "step": 1000,
+        "name": "Minimum daily_positive: "
+      }
+    },
+    {
+      "name": "Country_Region_selection",
+      "bind": {
+        "input": "select",
+        "options": [
+          null,
+          "United States",
+          "China",
+          "Spain",
+          "Australia",
+          "Poland",
+          "Italy"
+        ],
+        "labels": [
+          "Show All",
+          "United States",
+          "China",
+          "Spain",
+          "Australia",
+          "Poland",
+          "Italy"
+        ],
+        "name": "Country_Region Selection: "
+      }
+    }
+  ],
+  "transform": [
+    {
+      "filter": "Country_Region_selection == null || datum.Country_Region == Country_Region_selection"
+    },
+    {"filter": "datum.daily_positive > Daily_positive_Above"}
+  ],
+  "mark": "rule",
+  "encoding": {
+    "x": {
+      "field": "Date",
+      "type": "temporal",
+      "title": "Date",
+      "axis": {"tickCount": 6}
+    },
+    "y": {"field": "daily_positive", "type": "quantitative"},
+    "color": {"field": "Country_Region", "type": "nominal"},
+    "tooltip": [{"field": "Country_Region", "type": "nominal"}]
+  },
+  "config": {}
+}

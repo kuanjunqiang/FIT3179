@@ -1,0 +1,134 @@
+{
+  "$schema": "https://vega.github.io/schema/vega-lite/v4.json",
+  "width": 800,
+  "height": 600,
+  "title": "COVID-19 Death and Comfirmed Cases per Country",
+  "data": {
+    "url": "https://raw.githubusercontent.com/kuanjunqiang/FIT3179/main/tested_worldwide.csv"
+  },
+  "params": [
+    {
+      "name": "Country_Region_Selection",
+      "bind": {
+        "input": "select",
+        "options": [
+          null,
+          "Armenia",
+          "Australia",
+          "Bangladesh",
+          "Belgium",
+          "Canada",
+          "Costa Rica",
+          "Estonia",
+          "Greece",
+          "Iceland",
+          "Israel",
+          "Italy",
+          "Latvia",
+          "Lithuania",
+          "New Zealand",
+          "Poland",
+          "Russia",
+          "Serbia",
+          "Singapore",
+          "Slovakia",
+          "South Korea",
+          "Sweden",
+          "Turkey",
+          "Ulkraine",
+          "United Kingdom",
+          "United States"
+        ],
+        "labels": [
+          "Show All",
+          "Armenia",
+          "Australia",
+          "Bangladesh",
+          "Belgium",
+          "Canada",
+          "Costa Rica",
+          "Estonia",
+          "Greece",
+          "Iceland",
+          "Israel",
+          "Italy",
+          "Latvia",
+          "Lithuania",
+          "New Zealand",
+          "Poland",
+          "Russia",
+          "Serbia",
+          "Singapore",
+          "Slovakia",
+          "South Korea",
+          "Sweden",
+          "Turkey",
+          "Ulkraine",
+          "United Kingdom",
+          "United States"
+        ],
+        "name": "Country Region Selection: "
+      }
+    }
+  ],
+  "transform": [
+    {"filter": "datum.positive > 0"},
+    {"filter": "datum.death > 0"},
+    {
+      "filter": "Country_Region_Selection == null || datum.Country_Region == Country_Region_Selection"
+    },
+    {"calculate": "datum.death/datum.positive", "as": "probability death"}
+  ],
+  "encoding": {
+    "x": {
+      "field": "positive",
+      "type": "quantitative",
+      "title": "Comfirmed Cases",
+      "axis": {"tickCount": 7}
+    },
+    "y": {"field": "death", "type": "quantitative", "axis": {"tickCount": 10}}
+  },
+  "layer": [
+    {
+      "selection": {
+        "Country_Region_highlight": {
+          "type": "multi",
+          "fields": ["Country_Region"],
+          "bind": "legend"
+        }
+      },
+      "mark": "area",
+      "encoding": {
+        "color": {"field": "Country_Region", "type": "nominal"},
+        "opacity": {
+          "condition": {"selection": "Country_Region_highlight", "value": 0.6},
+          "value": 0.2
+        },
+        "tooltip": [
+          {"field": "Country_Region", "type": "nominal"},
+          {"field": "positive", "type": "quantitative", "format": ","},
+          {"field": "active", "type": "quantitative", "format": ","},
+          {"field": "death", "type": "quantitative", "format": ","},
+          {"field": "recovered", "type": "quantitative", "format": ","},
+          {
+            "field": "probability death",
+            "type": "quantitative",
+            "format": ".2f"
+          },
+          {"field": "hospitalized", "type": "quantitative", "format": ","}
+        ]
+      }
+    },
+    {
+      "mark": {
+        "type": "text",
+        "align": "right",
+        "baseline": "middle",
+        "dx": -12,
+        "fontSize": 11.5,
+        "fontStyle": "italic"
+      }
+    }
+  ],
+  "config": {}
+}

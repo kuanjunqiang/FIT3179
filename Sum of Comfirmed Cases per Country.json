@@ -1,0 +1,52 @@
+{
+  "$schema": "https://vega.github.io/schema/vega-lite/v4.json",
+  "width": 50,
+  "height": 600,
+  "title": "Sum of Comfirmed Cases per Country",
+  "data": {
+    "url": "https://raw.githubusercontent.com/kuanjunqiang/FIT3179/main/tested_worldwide.csv"
+  },
+  "params": [
+    {
+      "name": "Country_Region_Selection",
+      "bind": {
+        "input": "select",
+        "options": [
+          null,
+          "Canada",
+          "Bangladesh",
+          "Turkey",
+          "Italy",
+          "Costa Rica",
+          "United States"
+        ],
+        "labels": [
+          "Show All",
+          "Canada",
+          "Bangladesh",
+          "Turkey",
+          "Italy",
+          "Costa Rica",
+          "United States"
+        ],
+        "name": "Country Region Selection: "
+      }
+    }
+  ],
+  "transform": [
+    {
+      "filter": "Country_Region_Selection == null || datum.Country_Region == Country_Region_Selection"
+    }
+  ],
+  "mark": "bar",
+  "encoding": {
+    "y": {"field": "positive", "aggregate": "sum", "type": "quantitative"},
+    "color": {
+      "field": "Country_Region",
+      "type": "nominal",
+      "title": "Country Region"
+    },
+    "tooltip": [{"field": "Country_Region", "type": "nominal"}]
+  },
+  "config": {}
+}
